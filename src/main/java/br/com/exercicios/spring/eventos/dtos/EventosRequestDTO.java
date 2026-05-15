@@ -1,5 +1,6 @@
 package br.com.exercicios.spring.eventos.dtos;
 
+import br.com.exercicios.spring.eventos.Entity.enums.Status;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,7 +42,7 @@ public class EventosRequestDTO {
     private BigDecimal valorInscricao;
 
     @NotNull(message = "O status não pode ser nulo")
-    private Enum Status;
+    private Status status;
 
     public static Evento dtoToEntity(EventosRequestDTO eventosRequestDTO) {
         return Evento.builder()
@@ -50,10 +51,11 @@ public class EventosRequestDTO {
                 .palestrante(eventosRequestDTO.palestrante)
                 .emailContato(eventosRequestDTO.emailContato)
                 .cargaHoraria(eventosRequestDTO.cargaHoraria)
-                .dataEvento(eventosRequestDTO.cargaHoraria)
+                .dataEvento(eventosRequestDTO.dataEvento)
                 .quantidadeVagas(eventosRequestDTO.quantidadeVagas)
                 .valorInscricao(eventosRequestDTO.valorInscricao)
-                .Status(eventosRequestDTO.Status)
+                .dataCadastro(LocalDate.now())
+                .status(eventosRequestDTO.status)
                 .codigoInterno(java.util.UUID.randomUUID().toString()).build();
 
     }

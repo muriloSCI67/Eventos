@@ -13,7 +13,7 @@ public class EventosService {
     private EventosRepository eventosRepository;
 
     public EventosResponseDTO save(EventosRequestDTO dto){
-        Evento evento = eventosRepository.save(EventosRequestDTO.dtoToEntity(dto));
-        return EventosResponseDTO.entityToDto(evento);
+        Evento eventos = eventosRepository.save(EventosRequestDTO.dtoToEntity(dto));
+        return EventosResponseDTO.entityToDto(eventos);
     }
 }

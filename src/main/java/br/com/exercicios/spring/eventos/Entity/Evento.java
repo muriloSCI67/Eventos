@@ -1,5 +1,6 @@
 package br.com.exercicios.spring.eventos.Entity;
 
+import br.com.exercicios.spring.eventos.Entity.enums.Status;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,6 +32,8 @@ public class Evento {
     private LocalDate dataEvento;
     private Integer quantidadeVagas;
     private BigDecimal valorInscricao;
-    private Enum Status;
+    private Status status;
+    private LocalDate dataCadastro;
+    private String codigoInterno;
 
 }
