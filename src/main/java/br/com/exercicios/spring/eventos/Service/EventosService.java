@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class EventosService {
     @Autowired
-    private EventosRepository EventosRepository;
+    private EventosRepository eventosRepository;
 
     public EventosResponseDTO save(EventosRequestDTO dto){
         Eventos eventos = eventosRepository.save(EventosRequestDTO.dtoToEntity(dto));
