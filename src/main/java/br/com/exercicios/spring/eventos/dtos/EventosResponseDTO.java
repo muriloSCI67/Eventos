@@ -1,5 +1,6 @@
 package br.com.exercicios.spring.eventos.dtos;
 
+import br.com.exercicios.spring.eventos.Entity.Evento;
 import br.com.exercicios.spring.eventos.Entity.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,19 +19,26 @@ public class EventosResponseDTO {
     private String descricao;
     private Long id;
     private String palestrante;
-    private Integer cargaMorario;
+    private Integer cargaHoraria;
     private Integer quantidadeVagas;
     private LocalDate dataEvento;
     private BigDecimal valorInscricao;
     private Status status;
-    private LocalDate dataCadastro
+    private LocalDate dataCadastro;
 
 
 
-    public static EventosResponseDTO entityToDto(Eventos eventos) {
+    public static EventosResponseDTO entityToDto(Evento eventos) {
         return EventosResponseDTO.builder()
-                .nome(eventos.getNome())
-                .email(eventos.getEmail())
+                .titulo(eventos.getTitulo())
+                .descricao(eventos.getDescricao())
+                .palestrante(eventos.getPalestrante())
+                .cargaHoraria(eventos.getCargaHoraria())
+                .dataEvento(eventos.getDataEvento())
+                .quantidadeVagas(eventos.getQuantidadeVagas())
+                .valorInscricao(eventos.getValorInscricao())
+                .status(eventos.getStatus())
+                .dataCadastro(eventos.getDataCadastro())
                 .build();
     }
 }
