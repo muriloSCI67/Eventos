@@ -1,12 +1,14 @@
 package br.com.exercicios.spring.eventos.dtos;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import br.com.exercicios.spring.eventos.Entity.Evento;
 
 @AllArgsConstructor
 @Builder
@@ -29,4 +31,30 @@ public class EventosRequestDTO {
     @Min(value = 1, message = "A carga horária mínima é 1")
     private Integer cargaHoraria;
 
+    @FutureOrPresent(message = "Deve ser uma data válida")
+    private LocalDate dataEvento;
+
+    @Positive(message = "O número deve ser positivo")
+    private Integer quantidadeVagas;
+
+    @DecimalMin(value = "0.0", message = "Valor da inscrição precisa ser maior que 0")
+    private BigDecimal valorInscricao;
+
+    @NotNull(message = "O status não pode ser nulo")
+    private Enum Status;
+
+    public static Evento dtoToEntity(EventosRequestDTO eventosRequestDTO) {
+        return Evento.builder()
+                .titulo(eventosRequestDTO.titulo)
+                .descricao(eventosRequestDTO.descricao)
+                .palestrante(eventosRequestDTO.palestrante)
+                .emailContato(eventosRequestDTO.emailContato)
+                .cargaHoraria(eventosRequestDTO.cargaHoraria)
+                .dataEvento(eventosRequestDTO.cargaHoraria)
+                .quantidadeVagas(eventosRequestDTO.quantidadeVagas)
+                .valorInscricao(eventosRequestDTO.valorInscricao)
+                .Status(eventosRequestDTO.Status)
+                .codigoInterno(java.util.UUID.randomUUID().toString()).build();
+
+    }
     }
