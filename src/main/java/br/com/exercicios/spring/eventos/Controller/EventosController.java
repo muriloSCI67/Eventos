@@ -16,7 +16,7 @@ public class EventosController {
     private EventosService eventosService;
     //
     @PostMapping
-    public Eventos cadastrarEvento(@RequestBody Eventos eventos) {
+    public Evento cadastrarEvento(@RequestBody Evento evento) {
 
 //        if(evento.getPalestrante() > 0) {
 
@@ -27,11 +27,11 @@ public class EventosController {
 
 //            throw new MinhaException("A eventomoeda precisa ter um volume negociado maior que R$0");
 //        }
-        return eventosService.salvarEvento(eventos);
+        return eventosService.salvarEvento(evento);
     }
 
     @GetMapping
-    public List<Eventos> buscarTodosOsEventos() {
+    public List<Evento> buscarTodosOsEventos() {
         return eventosService.listarTodosOsEventos();
     }
 
@@ -41,13 +41,13 @@ public class EventosController {
     }
 
     @PutMapping("/id/{id}")
-    public Eventos editarEventoPorID(@PathVariable Long id, @RequestBody Eventos eventoAtualizada) {
+    public Evento editarEventoPorID(@PathVariable Long id, @RequestBody Eventos eventoAtualizada) {
         return eventosService.editarEventoPorID(id, eventoAtualizada);
 
     }
 
     @PutMapping("/descricao/{descricao}")
-    public Eventos editarEventoPorDescricao(@PathVariable String descricao, @RequestBody Eventos eventoAtualizada) {
+    public Evento editarEventoPorDescricao(@PathVariable String descricao, @RequestBody Evento eventoAtualizada) {
         return eventosService.editarEventoPorDescricao(descricao, eventoAtualizada);
     }
 }

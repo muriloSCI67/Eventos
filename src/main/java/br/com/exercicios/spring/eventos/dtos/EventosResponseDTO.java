@@ -23,7 +23,7 @@ public class EventosResponseDTO {
     private LocalDate dataEvento;
     private BigDecimal valorInscricao;
     private Status status;
-    private LocalDate dataCadastro
+    private LocalDate dataCadastro;
 
 
 
