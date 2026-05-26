@@ -19,6 +19,7 @@ public class EventosResponseDTO {
     private String descricao;
     private Long id;
     private String palestrante;
+    private String emailContato;
     private Integer cargaHoraria;
     private Integer quantidadeVagas;
     private LocalDate dataEvento;
@@ -27,18 +28,21 @@ public class EventosResponseDTO {
     private LocalDate dataCadastro;
 
 
-
-    public static EventosResponseDTO entityToDto(Evento eventos) {
+    public static EventosResponseDTO fromEntity(Evento entity) {
         return EventosResponseDTO.builder()
-                .titulo(eventos.getTitulo())
-                .descricao(eventos.getDescricao())
-                .palestrante(eventos.getPalestrante())
-                .cargaHoraria(eventos.getCargaHoraria())
-                .dataEvento(eventos.getDataEvento())
-                .quantidadeVagas(eventos.getQuantidadeVagas())
-                .valorInscricao(eventos.getValorInscricao())
-                .status(eventos.getStatus())
-                .dataCadastro(eventos.getDataCadastro())
+                .titulo(entity.getTitulo())
+                .descricao(entity.getDescricao())
+                .palestrante(entity.getPalestrante())
+                .emailContato(entity.getEmailContato())
+                .cargaHoraria(entity.getCargaHoraria())
+                .dataEvento(entity.getDataEvento())
+                .quantidadeVagas(entity.getQuantidadeVagas())
+                .valorInscricao(entity.getValorInscricao())
+                .status(entity.getStatus())
+                .id(entity.getId())
+                .dataCadastro(entity.getDataCadastro())
                 .build();
+
+
     }
 }
