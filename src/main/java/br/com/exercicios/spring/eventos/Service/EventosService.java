@@ -21,7 +21,7 @@ public class EventosService {
         return eventosRepository.findAll();
     }
 
-    public EventosResponseDTO findById(Long id){
+    public EventosResponseDTO findById(Long id) {
         Evento evento = eventosRepository.findById(id)
                 .orElseThrow(() -> new MinhaException("Evento não encontrado para o Id: " + id));
         return EventosResponseDTO.fromEntity(evento);
@@ -42,7 +42,7 @@ public class EventosService {
         return EventosResponseDTO.fromEntity(eventosRepository.save(evento));
     }
 
-    public List <EventosResponseDTO> findAll(){
+    public List<EventosResponseDTO> findAll() {
         return eventosRepository.findAll().stream()
                 .map(EventosResponseDTO::fromEntity)
                 .toList();
@@ -65,8 +65,45 @@ public class EventosService {
         return EventosResponseDTO.fromEntity(eventosRepository.save(evento));
     }
 
-    public void delete (Long id) {
-        if (!eventosRepository.existsById(id)){
+    public Evento editarEvento(Long id, Evento eventoAtualizado) {
+        Optional<Evento> cripto = eventosRepository.findById(id);
+        if (cripto.isPresent()) {
+            Evento eventoExistente = cripto.get();
+
+            eventoExistente.setTitulo(eventoAtualizado.getTitulo() != null ?
+                    eventoAtualizado.getTitulo() : eventoExistente.getTitulo());
+
+            eventoExistente.setPalestrante(eventoAtualizado.getPalestrante() != null ?
+                    eventoAtualizado.getPalestrante() : eventoExistente.getPalestrante());
+
+            eventoExistente.setDescricao(eventoAtualizado.getDescricao() != null ?
+                    eventoAtualizado.getDescricao() : eventoExistente.getDescricao());
+
+            eventoExistente.setEmailContato(eventoAtualizado.getEmailContato() != null ?
+                    eventoAtualizado.getEmailContato() : eventoExistente.getEmailContato());
+
+            eventoExistente.setCargaHoraria(eventoAtualizado.getCargaHoraria() != null ?
+                    eventoAtualizado.getCargaHoraria() : eventoExistente.getCargaHoraria());
+
+            eventoExistente.setDataEvento(eventoAtualizado.getDataEvento() != null ?
+                    eventoAtualizado.getDataEvento() : eventoExistente.getDataEvento());
+
+            eventoExistente.setQuantidadeVagas(eventoAtualizado.getQuantidadeVagas() != null ?
+                    eventoAtualizado.getQuantidadeVagas() : eventoExistente.getQuantidadeVagas());
+
+            eventoExistente.setValorInscricao(eventoAtualizado.getValorInscricao() != null ?
+                    eventoAtualizado.getValorInscricao() : eventoExistente.getValorInscricao());
+
+            eventoExistente.setStatus(eventoAtualizado.getStatus() != null ?
+                    eventoAtualizado.getStatus() : eventoExistente.getStatus());
+
+            return eventosRepository.save(eventoExistente);
+        }
+        throw new RuntimeException("Cripto nao encontrada para o id: " + id);
+    }
+
+    public void delete(Long id) {
+        if (!eventosRepository.existsById(id)) {
             throw new MinhaException("Evento não encontrado para o id: " + id);
         }
         eventosRepository.deleteById(id);
