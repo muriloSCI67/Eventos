@@ -30,6 +30,7 @@ public class Evento {
     private LocalDate dataEvento;
     private Integer quantidadeVagas;
     private BigDecimal valorInscricao;
+    @Enumerated(EnumType.STRING)
     private Status status;
     private LocalDate dataCadastro;
     private String codigoInterno;
