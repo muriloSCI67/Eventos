@@ -26,14 +26,17 @@ public class EventosController {
     }
 
     @GetMapping
-    public java.util.List<EventosResponseDTO> findAll() { return eventosService.findAll();}
-
-    @PutMapping("/{id}")
-    public EventosResponseDTO update (@PathVariable Long id, @Valid @RequestBody EventosRequestDTO eventosRequestDTO) {
-        return eventosService.update(id, eventosRequestDTO);
+    public java.util.List<EventosResponseDTO> findAll() {
+        return eventosService.findAll();
     }
+
+    @PutMapping
+    public EventosResponseDTO editarEvento(@RequestParam Long id, @RequestBody EventosRequestDTO eventosRequestDTO) {
+        return eventosService.editarEvento(id, eventosRequestDTO);
+    }
+
     @DeleteMapping("/{id}")
-    public void delete (@PathVariable Long id) {
+    public void delete(@PathVariable Long id) {
         eventosService.delete(id);
     }
 

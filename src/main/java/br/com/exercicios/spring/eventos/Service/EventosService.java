@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class EventosService {
@@ -48,58 +47,38 @@ public class EventosService {
                 .toList();
     }
 
-    public EventosResponseDTO update(Long id, EventosRequestDTO dto) {
-        Evento evento = eventosRepository.findById(id)
-                .orElseThrow(() -> new MinhaException("Evento não encontrado para o Id: " + id));
+    public EventosResponseDTO editarEvento(Long id, EventosRequestDTO dto) {
+        Evento eventoExistente = eventosRepository.findById(id)
+                .orElseThrow(() -> new MinhaException("Evento não encontrado para o id: " + id));
 
-        evento.setTitulo(dto.getTitulo());
-        evento.setDataEvento(dto.getDataEvento());
-        evento.setStatus(dto.getStatus());
-        evento.setEmailContato(dto.getEmailContato());
-        evento.setPalestrante(dto.getPalestrante());
-        evento.setDescricao(dto.getDescricao());
-        evento.setQuantidadeVagas(dto.getQuantidadeVagas());
-        evento.setValorInscricao(dto.getValorInscricao());
-        evento.setCargaHoraria(dto.getCargaHoraria());
+        eventoExistente.setTitulo(dto.getTitulo() != null ?
+                dto.getTitulo() : eventoExistente.getTitulo());
 
-        return EventosResponseDTO.fromEntity(eventosRepository.save(evento));
-    }
+        eventoExistente.setPalestrante(dto.getPalestrante() != null ?
+                dto.getPalestrante() : eventoExistente.getPalestrante());
 
-    public Evento editarEvento(Long id, Evento eventoAtualizado) {
-        Optional<Evento> cripto = eventosRepository.findById(id);
-        if (cripto.isPresent()) {
-            Evento eventoExistente = cripto.get();
+        eventoExistente.setDescricao(dto.getDescricao() != null ?
+                dto.getDescricao() : eventoExistente.getDescricao());
 
-            eventoExistente.setTitulo(eventoAtualizado.getTitulo() != null ?
-                    eventoAtualizado.getTitulo() : eventoExistente.getTitulo());
+        eventoExistente.setEmailContato(dto.getEmailContato() != null ?
+                dto.getEmailContato() : eventoExistente.getEmailContato());
 
-            eventoExistente.setPalestrante(eventoAtualizado.getPalestrante() != null ?
-                    eventoAtualizado.getPalestrante() : eventoExistente.getPalestrante());
+        eventoExistente.setCargaHoraria(dto.getCargaHoraria() != null ?
+                dto.getCargaHoraria() : eventoExistente.getCargaHoraria());
 
-            eventoExistente.setDescricao(eventoAtualizado.getDescricao() != null ?
-                    eventoAtualizado.getDescricao() : eventoExistente.getDescricao());
+        eventoExistente.setDataEvento(dto.getDataEvento() != null ?
+                dto.getDataEvento() : eventoExistente.getDataEvento());
 
-            eventoExistente.setEmailContato(eventoAtualizado.getEmailContato() != null ?
-                    eventoAtualizado.getEmailContato() : eventoExistente.getEmailContato());
+        eventoExistente.setQuantidadeVagas(dto.getQuantidadeVagas() != null ?
+                dto.getQuantidadeVagas() : eventoExistente.getQuantidadeVagas());
 
-            eventoExistente.setCargaHoraria(eventoAtualizado.getCargaHoraria() != null ?
-                    eventoAtualizado.getCargaHoraria() : eventoExistente.getCargaHoraria());
+        eventoExistente.setValorInscricao(dto.getValorInscricao() != null ?
+                dto.getValorInscricao() : eventoExistente.getValorInscricao());
 
-            eventoExistente.setDataEvento(eventoAtualizado.getDataEvento() != null ?
-                    eventoAtualizado.getDataEvento() : eventoExistente.getDataEvento());
+        eventoExistente.setStatus(dto.getStatus() != null ?
+                dto.getStatus() : eventoExistente.getStatus());
 
-            eventoExistente.setQuantidadeVagas(eventoAtualizado.getQuantidadeVagas() != null ?
-                    eventoAtualizado.getQuantidadeVagas() : eventoExistente.getQuantidadeVagas());
-
-            eventoExistente.setValorInscricao(eventoAtualizado.getValorInscricao() != null ?
-                    eventoAtualizado.getValorInscricao() : eventoExistente.getValorInscricao());
-
-            eventoExistente.setStatus(eventoAtualizado.getStatus() != null ?
-                    eventoAtualizado.getStatus() : eventoExistente.getStatus());
-
-            return eventosRepository.save(eventoExistente);
-        }
-        throw new RuntimeException("Cripto nao encontrada para o id: " + id);
+        return EventosResponseDTO.fromEntity(eventosRepository.save(eventoExistente));
     }
 
     public void delete(Long id) {
