@@ -336,3 +336,284 @@ Depois que o CRUD basico estiver funcionando, os proximos passos podem ser:
 - criar perfis de ambiente, como `dev` e `test`;
 - usar banco H2 nos testes.
 
+## 14. Como testar no Postman
+
+Antes de testar no Postman, a aplicacao precisa estar rodando.
+
+Normalmente a URL base sera:
+
+```text
+http://localhost:8080
+```
+
+O controller aceita dois caminhos:
+
+```text
+/api/eventos
+/eventos
+```
+
+Entao voce pode usar:
+
+```text
+http://localhost:8080/api/eventos
+```
+
+ou:
+
+```text
+http://localhost:8080/eventos
+```
+
+Nos exemplos abaixo vou usar `/api/eventos`.
+
+### Criar um evento
+
+Metodo:
+
+```text
+POST
+```
+
+URL:
+
+```text
+http://localhost:8080/api/eventos
+```
+
+No Postman:
+
+- va em `Body`;
+- escolha `raw`;
+- escolha `JSON`;
+- cole o JSON.
+
+Exemplo de JSON:
+
+```json
+{
+  "titulo": "Semana Java",
+  "descricao": "Evento sobre Spring Boot e APIs REST",
+  "palestrante": "Murilo Spagnoli",
+  "emailContato": "murilo@email.com",
+  "cargaHoraria": 8,
+  "dataEvento": "2026-07-20",
+  "quantidadeVagas": 100,
+  "valorInscricao": 49.90,
+  "status": "ABERTO"
+}
+```
+
+Observacoes:
+
+- `dataEvento` precisa estar no formato `YYYY-MM-DD`.
+- `status` precisa ser um dos valores do enum: `ABERTO`, `FECHADO` ou `CANCELADO`.
+- `emailContato` precisa ter formato de email valido.
+- `cargaHoraria` precisa ser no minimo `1`.
+- `quantidadeVagas` precisa ser positivo.
+
+Resposta esperada:
+
+```json
+{
+  "titulo": "Semana Java",
+  "descricao": "Evento sobre Spring Boot e APIs REST",
+  "id": 1,
+  "palestrante": "Murilo Spagnoli",
+  "emailContato": "murilo@email.com",
+  "cargaHoraria": 8,
+  "quantidadeVagas": 100,
+  "dataEvento": "2026-07-20",
+  "valorInscricao": 49.90,
+  "status": "ABERTO",
+  "dataCadastro": "2026-06-11"
+}
+```
+
+A data de cadastro pode mudar, porque ela e gerada automaticamente no dia em que salvar.
+
+### Listar todos os eventos
+
+Metodo:
+
+```text
+GET
+```
+
+URL:
+
+```text
+http://localhost:8080/api/eventos
+```
+
+Nao precisa enviar JSON no body.
+
+Resposta esperada:
+
+```json
+[
+  {
+    "titulo": "Semana Java",
+    "descricao": "Evento sobre Spring Boot e APIs REST",
+    "id": 1,
+    "palestrante": "Murilo Spagnoli",
+    "emailContato": "murilo@email.com",
+    "cargaHoraria": 8,
+    "quantidadeVagas": 100,
+    "dataEvento": "2026-07-20",
+    "valorInscricao": 49.90,
+    "status": "ABERTO",
+    "dataCadastro": "2026-06-11"
+  }
+]
+```
+
+### Buscar evento por ID
+
+Metodo:
+
+```text
+GET
+```
+
+URL:
+
+```text
+http://localhost:8080/api/eventos/1
+```
+
+Nesse exemplo, `1` e o ID do evento.
+
+Nao precisa enviar JSON no body.
+
+Se o evento existir, retorna os dados dele.
+
+Se nao existir, deve retornar uma mensagem de erro tratada pelo handler.
+
+### Editar um evento
+
+Metodo:
+
+```text
+PUT
+```
+
+URL:
+
+```text
+http://localhost:8080/api/eventos?id=1
+```
+
+Importante:
+
+- no seu controller, o `PUT` recebe o ID por `@RequestParam`;
+- por isso o ID vai na URL como `?id=1`;
+- nao e `PUT /api/eventos/1` neste projeto.
+
+No Postman:
+
+- va em `Body`;
+- escolha `raw`;
+- escolha `JSON`;
+- envie os campos que quer atualizar.
+
+Exemplo atualizando todos os campos:
+
+```json
+{
+  "titulo": "Semana Java Atualizada",
+  "descricao": "Evento atualizado sobre Spring Boot",
+  "palestrante": "Murilo",
+  "emailContato": "contato@email.com",
+  "cargaHoraria": 10,
+  "dataEvento": "2026-08-15",
+  "quantidadeVagas": 150,
+  "valorInscricao": 79.90,
+  "status": "ABERTO"
+}
+```
+
+Exemplo atualizando apenas alguns campos:
+
+```json
+{
+  "titulo": "Novo titulo do evento",
+  "status": "FECHADO"
+}
+```
+
+O service foi feito para manter o valor antigo quando algum campo vier `null`.
+
+Entao, se voce nao mandar um campo no JSON, ele continua como estava.
+
+### Deletar um evento
+
+Metodo:
+
+```text
+DELETE
+```
+
+URL:
+
+```text
+http://localhost:8080/api/eventos/1
+```
+
+Nesse exemplo, `1` e o ID do evento que sera deletado.
+
+Nao precisa enviar JSON no body.
+
+Se der certo, a resposta pode vir vazia.
+
+Se o ID nao existir, o service lanca uma excecao dizendo que o evento nao foi encontrado.
+
+## 15. Resumo rapido dos endpoints
+
+```text
+POST   http://localhost:8080/api/eventos
+GET    http://localhost:8080/api/eventos
+GET    http://localhost:8080/api/eventos/1
+PUT    http://localhost:8080/api/eventos?id=1
+DELETE http://localhost:8080/api/eventos/1
+```
+
+## 16. Erros comuns no Postman
+
+Erro ao criar ou editar:
+
+```text
+400 Bad Request
+```
+
+Possiveis causas:
+
+- faltou algum campo obrigatorio;
+- email esta invalido;
+- data esta no passado;
+- status foi escrito errado;
+- numero de vagas veio negativo;
+- carga horaria veio menor que 1.
+
+Erro ao buscar, editar ou deletar:
+
+```text
+Evento nao encontrado
+```
+
+Possivel causa:
+
+- o ID informado nao existe no banco.
+
+Erro de conexao:
+
+```text
+Connection refused
+```
+
+Possiveis causas:
+
+- a aplicacao Spring nao esta rodando;
+- o Postman esta usando porta errada;
+- o banco PostgreSQL nao esta ligado;
+- a configuracao do `application.properties` esta incorreta.
