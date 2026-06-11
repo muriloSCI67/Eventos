@@ -617,3 +617,243 @@ Possiveis causas:
 - o Postman esta usando porta errada;
 - o banco PostgreSQL nao esta ligado;
 - a configuracao do `application.properties` esta incorreta.
+
+## 17. Como funciona o `application.properties`
+
+O arquivo `application.properties` fica em:
+
+```text
+src/main/resources/application.properties
+```
+
+Ele serve para configurar a aplicacao Spring Boot.
+
+No seu projeto, ele esta assim:
+
+```properties
+spring.application.name=Eventos
+
+spring.datasource.url=jdbc:postgresql://localhost:5432/Eventos
+spring.datasource.username=postgres
+spring.datasource.password=123
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.hibernate.ddl-auto=update
+```
+
+### Nome da aplicacao
+
+```properties
+spring.application.name=Eventos
+```
+
+Isso define o nome da aplicacao dentro do Spring.
+
+Nao precisa ser igual ao nome do banco, mas normalmente usamos um nome parecido para organizar.
+
+### URL do banco
+
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/Eventos
+```
+
+Essa linha diz onde esta o banco PostgreSQL.
+
+Dividindo a URL:
+
+```text
+jdbc:postgresql://localhost:5432/Eventos
+```
+
+Significado:
+
+- `jdbc`: forma que o Java usa para conectar em banco.
+- `postgresql`: tipo do banco.
+- `localhost`: o banco esta rodando no proprio computador.
+- `5432`: porta padrao do PostgreSQL.
+- `Eventos`: nome do banco de dados.
+
+Importante:
+
+O banco chamado `Eventos` precisa existir no PostgreSQL.
+
+Se o banco no PostgreSQL tiver outro nome, voce precisa trocar o final da URL.
+
+Exemplo, se o banco se chamar `eventos_db`:
+
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/eventos_db
+```
+
+### Usuario do banco
+
+```properties
+spring.datasource.username=postgres
+```
+
+Esse e o usuario usado para entrar no PostgreSQL.
+
+No seu caso, esta usando o usuario padrao:
+
+```text
+postgres
+```
+
+Se voce criou outro usuario no PostgreSQL, precisa colocar esse outro nome.
+
+Exemplo:
+
+```properties
+spring.datasource.username=meu_usuario
+```
+
+### Senha do banco
+
+```properties
+spring.datasource.password=123
+```
+
+Essa e a senha do usuario do PostgreSQL.
+
+No seu projeto, a senha configurada e:
+
+```text
+123
+```
+
+Essa senha precisa ser a mesma senha que voce usa para conectar no PostgreSQL com esse usuario.
+
+Se a senha do seu PostgreSQL for outra, precisa trocar aqui.
+
+Exemplo:
+
+```properties
+spring.datasource.password=minha_senha
+```
+
+### Driver do PostgreSQL
+
+```properties
+spring.datasource.driver-class-name=org.postgresql.Driver
+```
+
+Essa linha informa qual driver o Spring deve usar para conectar no banco.
+
+Como o banco e PostgreSQL, o driver e:
+
+```text
+org.postgresql.Driver
+```
+
+Normalmente voce nao precisa mexer nessa linha.
+
+### Dialeto do Hibernate
+
+```properties
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+```
+
+Essa linha diz para o Hibernate gerar comandos SQL pensando no PostgreSQL.
+
+Cada banco tem pequenas diferencas de SQL.
+
+Por isso o Hibernate precisa saber qual banco esta sendo usado.
+
+### Criacao e atualizacao das tabelas
+
+```properties
+spring.jpa.hibernate.ddl-auto=update
+```
+
+Essa configuracao controla o que o Hibernate faz com as tabelas.
+
+No seu projeto esta como:
+
+```text
+update
+```
+
+Isso significa:
+
+- se a tabela ainda nao existir, o Hibernate tenta criar;
+- se voce adicionar um campo novo na entidade, ele tenta atualizar a tabela;
+- ele nao apaga os dados automaticamente.
+
+Valores comuns:
+
+- `update`: atualiza o banco conforme as entidades.
+- `create`: recria as tabelas toda vez que a aplicacao sobe.
+- `create-drop`: cria ao iniciar e apaga ao encerrar.
+- `validate`: apenas verifica se o banco combina com as entidades.
+- `none`: nao faz nada automaticamente.
+
+Para estudo, `update` costuma ser o mais pratico.
+
+Para projeto real em producao, o ideal e usar migrations com Flyway ou Liquibase.
+
+### Exemplo completo para este projeto
+
+Se o seu PostgreSQL estiver rodando localmente, com:
+
+- banco: `Eventos`;
+- usuario: `postgres`;
+- senha: `123`;
+- porta: `5432`;
+
+entao o arquivo fica assim:
+
+```properties
+spring.application.name=Eventos
+
+spring.datasource.url=jdbc:postgresql://localhost:5432/Eventos
+spring.datasource.username=postgres
+spring.datasource.password=123
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.hibernate.ddl-auto=update
+```
+
+### Erros comuns com o banco
+
+Erro:
+
+```text
+Connection refused
+```
+
+Possiveis causas:
+
+- PostgreSQL nao esta aberto;
+- a porta nao e `5432`;
+- o banco esta em outro computador;
+- a URL esta errada.
+
+Erro:
+
+```text
+database "Eventos" does not exist
+```
+
+Possivel causa:
+
+- o banco `Eventos` ainda nao foi criado no PostgreSQL.
+
+Solucao:
+
+Criar o banco com esse nome ou trocar a URL para o nome correto.
+
+Erro:
+
+```text
+password authentication failed
+```
+
+Possiveis causas:
+
+- senha errada;
+- usuario errado;
+- o PostgreSQL esta configurado com outra senha.
+
+Solucao:
+
+Conferir o usuario e senha que voce usa no PostgreSQL e colocar os mesmos valores no `application.properties`.
